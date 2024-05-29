@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace TransferOrderClient
 {
@@ -32,7 +33,7 @@ namespace TransferOrderClient
                     //Exibir os dados
                     foreach (var order in transferOrders)
                     {
-                        Console.WriteLine($"Id: {order.Id}, Pedido: {order.Pedido}, OrderDate: {order.OrderDate}");
+                        Console.WriteLine($"Pedido: {order.Pedido}, OrderDate: {order.OrderDate}");
                     }
 
                     //Salvar os dados no DB
@@ -58,10 +59,18 @@ namespace TransferOrderClient
                     {
                         var connectionString = context.Configuration.GetConnectionString("DefaultConnection");
                         services.AddDbContext<TransferOrderContext>(options =>
-                            options.UseSqlServer(connectionString));
+                            options.UseSqlServer(connectionString)
+                                    .EnableSensitiveDataLogging()
+                                    .LogTo(Console.WriteLine, LogLevel.Information));
                         services.AddSingleton<HttpClient>();
                         services.AddTransient<TransferOrderService>();
                         services.AddTransient<DatabaseService>();
+                    })
+                    .ConfigureLogging(logging =>
+                    {
+                        logging.ClearProviders();
+                        logging.AddConsole();
+                        logging.AddDebug();
                     });
 
         }

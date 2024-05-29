@@ -9,12 +9,16 @@ namespace TestApi.Controllers
     [Route("[controller]")]
     public class TransferOrdersController : ControllerBase
     {
+        
         [HttpGet]
         public IActionResult Get()
         {
             var transferOrders = new List<TransferOrder> {
-                new TransferOrder {Id = 1, Pedido = "TO1234", OrderDate = DateTime.Now},
-                new TransferOrder {Id = 2, Pedido = "T05678", OrderDate= DateTime.Now},
+                new TransferOrder {Pedido = "TO1234", OrderDate = DateTime.Now},
+                new TransferOrder {Pedido = "T05678", OrderDate= DateTime.Now},
+                new TransferOrder {Pedido = "TO1234", OrderDate = DateTime.Now},
+                new TransferOrder {Pedido = "T05678", OrderDate= DateTime.Now},
+                new TransferOrder {Pedido = "T09999", OrderDate= DateTime.Now},
             };
 
             return Ok(transferOrders);
